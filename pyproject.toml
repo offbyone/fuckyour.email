@@ -1,0 +1,29 @@
+[project]
+name = "fuckyour.email"
+version = "1.0.0"
+description = "Fuck your email, specifically"
+authors = [
+{ name = "Chris Rose", email="chris@fuckyour.email" },
+]
+
+dependencies = [
+  "django~=5.0.1",
+  "boto3~=1.34",
+  "django-click>=2.3.0",
+  "bleach[css]~=5.0.0",
+]
+
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest-django>=4.7.0",
+    "pytest~=8.0",
+    "django-stubs>=4.2.7",
+    "djlint>=1.34.0",
+    "pytest-xdist~=3.5.0",
+    "pytest-cov~=4.1.0",
+    "django-debug-toolbar>=4.2.0",
+]
