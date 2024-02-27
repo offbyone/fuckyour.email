@@ -1,0 +1,20 @@
+{% extends "fye/base.html" %}
+{% block title %}
+    {{ email.entry.subject }}
+{% endblock title %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="pe-3">
+                    <a href="{% url "fuckyouremails:inbox" %}">Back</a>
+                </div>
+                <div class="flex-grow-1 text-begin ps-3">{{ email.entry.subject }}</div>
+            </div>
+            <div class="card-body">
+                <!-- Use the 'safe' filter because we trust bleach's sanitization -->
+                <p class="card-text" style="white-space: pre-wrap;">{{ email.content|safe }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

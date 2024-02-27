@@ -1,0 +1,79 @@
+{% load static django_bootstrap5 i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    {% block header %}
+        <head>
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            <title>
+                {% block title %}
+                    Fuck. Your. Email.
+                {% endblock title %}
+            </title>
+            <!-- Fonts -->
+            <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
+                  rel="stylesheet"
+                  type="text/css" />
+            <link href="{% static 'fontawesomefree/css/brands.css' %}"
+                  rel="stylesheet"
+                  type="text/css" />
+            <link href="{% static 'fontawesomefree/css/solid.css' %}"
+                  rel="stylesheet"
+                  type="text/css" />
+            <script src="https://unpkg.com/htmx.org@1.9.10"
+                    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+                    crossorigin="anonymous"></script>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link rel="icon" href="{% static 'images/worldcon-logo.png' %}" />
+            <!-- Styles -->
+            {% bootstrap_css %} {% bootstrap_javascript %}
+            <!-- GNU -->
+            <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+        </head>
+    {% endblock %}
+    <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light static-top no-print">
+            <div class="container-fluid">
+                <a class="navbar-brand" href=":///">
+                    <div class="logo-container">Fuck. Your. Email.</div>
+                </a>
+                <div class="nav-item center-title">Because Spam Sucks</div>
+                <div class="d-flex">
+                    <div class="collapse navbar-collapse w-100 w-lg-auto" id="navbarCollapse">
+                        <ul class="navbar-nav ml-lg-auto">
+                            <li class="nav-item dropdown text-primary">
+                                <a class="nav-link" href="https://github.com/offbyone/fuckyour.email">
+                                    <span class="text-dark">{% translate "Fuck Your Source" %}</span>
+                                </a>
+                            </li>
+                            {% if user.is_authenticated %}
+                                <li>
+                                    <form method="post" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-link" type="submit">Sign Out</button>
+                                    </form>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <main class="main-block flex-shrink-0" role="main">
+            <!--base.html-->
+            {% block toasts %}
+                {% include "bits/toasts.html" with messages=messages %}
+            {% endblock toasts %}
+            <div class="container-fluid">
+                <div class="flex-row">
+                    <div class="d-flex justify-content-center align-items-center bd-highlight">
+                        {% block content %}<div style="background: blue;">The page content would go here, if you had it</div>{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

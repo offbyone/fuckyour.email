@@ -1,0 +1,29 @@
+{% extends "fye/base.html" %}
+{% block title %}Inbox{% endblock %}
+{% block content %}
+    <h1>Inbox</h1>
+    <div class="container mt-4">
+        <table class="table table-compact table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Received</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example row -->
+                {% for email in emails %}
+                    <tr>
+                        <td>{{ email.sender }}</td>
+                        <td>
+                            <a href="{% url "fuckyouremails:message" email.message_id %}">{{ email.subject }}</a>
+                        </td>
+                        <td>{{ email.last_modified }}</td>
+                    </tr>
+                {% endfor %}
+                <!-- Repeat rows as needed -->
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

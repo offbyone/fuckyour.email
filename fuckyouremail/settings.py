@@ -36,17 +36,33 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    # use whitenoise to serve static files, instead of django's builtin
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
+    # debug helper
+    "django_extensions",
+    "django_browser_reload",
+    # Theming
+    "django_bootstrap5",
+    "fontawesomefree",
+    # HTMX support
+    "django_htmx",
+    # A healthcheck
+    "watchman",
+    "fuckyour.email",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "fuckyouremail.urls"
@@ -80,6 +96,12 @@ DATABASES = {
     }
 }
 
+# Set up an in-memory cache for Django
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
