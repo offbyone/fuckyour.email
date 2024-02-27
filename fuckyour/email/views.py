@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Page, Paginator
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 BUCKET_NAME = "mail.fuckyour.email"
 PREFIX = "email/"
@@ -24,8 +24,12 @@ def inbox(request: HttpRequest) -> HttpResponse:
 
 
 def message(request: HttpRequest, message_id: str) -> HttpResponse:
-    context = {"email": get_email(request, message_id)}
-    return render(request, "fye/message.html", context)
+    if request.method == "GET":
+        context = {"email": get_email(request, message_id)}
+        return render(request, "fye/message.html", context)
+    elif request.method == "DELETE":
+        delete_email(request, message_id)
+        return HttpResponse("")
 
 
 @dataclass
@@ -59,6 +63,13 @@ def get_email(request: HttpRequest, message_id: str) -> Message:
         last_modified=response["LastModified"],
     )
     return Message(entry=entry, message=parsed, content=get_email_content(parsed))
+
+
+def delete_email(request: HttpRequest, message_id: str) -> None:
+    s3_client = boto3.client(
+        "s3",
+    )
+    s3_client.delete_object(Bucket=BUCKET_NAME, Key=message_id)
 
 
 def get_email_content(email_msg: email.message.Message) -> str:

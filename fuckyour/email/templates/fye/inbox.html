@@ -9,9 +9,12 @@
                     <th scope="col">Sender</th>
                     <th scope="col">Subject</th>
                     <th scope="col">Received</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody hx-confirm="Are you sure?"
+                   hx-target="closest tr"
+                   hx-swap="outerHTML swap:1s">
                 <!-- Example row -->
                 {% for email in emails %}
                     <tr>
@@ -20,6 +23,10 @@
                             <a href="{% url "fuckyouremails:message" email.message_id %}">{{ email.subject }}</a>
                         </td>
                         <td>{{ email.last_modified }}</td>
+                        <td>
+                            <button class="btn btn-danger"
+                                    hx-delete="{% url "fuckyouremails:message" email.message_id %}">Delete</button>
+                        </td>
                     </tr>
                 {% endfor %}
                 <!-- Repeat rows as needed -->
