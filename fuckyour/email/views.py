@@ -36,6 +36,7 @@ def message(request: HttpRequest, message_id: str) -> HttpResponse:
 class MessageEntry:
     message_id: str
     sender: str
+    recipient: str
     subject: str
     last_modified: datetime
 
@@ -59,6 +60,7 @@ def get_email(request: HttpRequest, message_id: str) -> Message:
     entry = MessageEntry(
         message_id=message_id,
         sender=tags["From"],
+        recipient=tags["To"],
         subject=tags["Subject"],
         last_modified=response["LastModified"],
     )
@@ -122,10 +124,10 @@ def yield_bucket_messages(request: HttpRequest) -> Generator[MessageEntry, Any, 
                 o["Key"], partial(fetch_tags, s3_client, o["Key"])
             )
             tags = format_tags(raw_tags)
-
             m = MessageEntry(
                 message_id=o["Key"],
                 sender=tags["From"],
+                recipient=tags.get("To", "??@fuckyour.email"),
                 subject=tags["Subject"],
                 last_modified=o["LastModified"],
             )
@@ -145,6 +147,7 @@ def message_entry(s3_object, tags) -> MessageEntry:
     return MessageEntry(
         message_id=s3_object["Key"],
         sender=tags["From"],
+        recipient=tags.get("To", "??@fuckyour.email"),
         subject=tags["Subject"],
         last_modified=s3_object["LastModified"],
     )
