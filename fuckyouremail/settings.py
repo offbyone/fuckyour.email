@@ -27,7 +27,13 @@ SECRET_KEY = "django-insecure-xvy6598=at8bi$%z&h6v5ioki_5p+#v!7k8v9)3@pk4c@c(8iu
 DEBUG = os.environ.get("DJANGO_DEBUG") is not None
 
 ALLOWED_HOSTS = (
-    ["*"] if DEBUG else ["fuckyouremail", "fuckyouremail.camel-tortoise.ts.net"]
+    ["*"]
+    if DEBUG
+    else [
+        "fuckyouremail",
+        "fuckyouremail.camel-tortoise.ts.net",
+        "fuckyouremail.offby1.net",
+    ]
 )
 
 
