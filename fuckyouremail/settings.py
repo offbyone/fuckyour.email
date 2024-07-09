@@ -33,6 +33,7 @@ ALLOWED_HOSTS = (
         "fuckyouremail",
         "fuckyouremail.camel-tortoise.ts.net",
         "fuckyouremail.offby1.net",
+        "fuckyour-email.fly.dev",
     ]
 )
 
