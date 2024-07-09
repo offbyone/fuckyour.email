@@ -26,5 +26,7 @@ COPY --from=builder /project/.venv /project/.venv
 COPY docker/start.sh /app/start.sh
 WORKDIR /project
 
+EXPOSE 8000
+
 # set command/entrypoint, adapt to fit your needs
 CMD ["/app/start.sh"]
