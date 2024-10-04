@@ -1,32 +1,36 @@
-# build stage
-FROM python:3.12-alpine AS builder
+ARG PYTHON_VERSION=3.12-slim
 
-# install PDM
-RUN pip install -U pip setuptools wheel
-RUN pip install pdm
+FROM python:${PYTHON_VERSION}
 
-# copy files
-COPY pyproject.toml pdm.lock /project/
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PROJECT_ENVIRONMENT=/app
 
-# install dependencies and project
-WORKDIR /project
-RUN pdm install --prod --no-lock --no-editable
+RUN mkdir -p /code
 
-# run stage
-FROM python:3.12-alpine
+WORKDIR /code
 
-RUN apk update && apk add ca-certificates iptables ip6tables bash && rm -rf /var/cache/apk/*
+# Security-conscious organizations should package/review uv themselves.
+COPY --from=ghcr.io/astral-sh/uv:0.4.18 /uv /bin/uv
 
-# retrieve packages from build stage
-ENV PYTHONPATH=/project/__pypackages__
-COPY . /project/
-COPY --from=builder /project/.venv /project/.venv
+COPY pyproject.toml uv.lock /code/
+RUN --mount=type=cache,target=/root/.cache <<EOT
+cd /_lock
+uv sync \
+    --frozen \
+    --no-dev \
+    --no-sources \
+    --no-install-project
+EOT
 
-# Service scripts
-COPY docker/start.sh /app/start.sh
-WORKDIR /project
+COPY . /code
+RUN --mount=type=cache,target=/root/.cache \
+    uv pip install \
+        --python=$UV_PROJECT_ENVIRONMENT \
+        --no-deps \
+        /code
 
 EXPOSE 8000
 
-# set command/entrypoint, adapt to fit your needs
-CMD ["/app/start.sh"]
+CMD ["/app/bin/gunicorn","--bind",":8000","--workers","2","fuckyouremail.wsgi"]
