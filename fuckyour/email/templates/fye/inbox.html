@@ -3,6 +3,12 @@
 {% block content %}
     <div class="container mt-4">
         <h1>Inbox</h1>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
         <table class="table table-compact table-striped">
             <thead>
                 <tr>

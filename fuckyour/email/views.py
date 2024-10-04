@@ -19,7 +19,13 @@ PREFIX = "email/"
 
 
 def inbox(request: HttpRequest) -> HttpResponse:
-    context = {"emails": get_bucket_messages(request)}
+    context = {}
+    try:
+        context["emails"] = get_bucket_messages(request)
+    except Exception as e:
+        context["emails"] = []
+        context["error"] = str(e)
+
     return render(request, "fye/inbox.html", context)
 
 
