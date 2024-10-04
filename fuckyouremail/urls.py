@@ -14,6 +14,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+import importlib.util
+
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
@@ -24,6 +27,10 @@ urlpatterns = [
     path("", views.inbox),
     path("fye/", include("fuckyour.email.urls", namespace="fuckyouremails")),
     path("watchman/", include("watchman.urls")),
-    path("__reload__/", include("django_browser_reload.urls")),
-    path("__debug__/", include("debug_toolbar.urls")),
 ]
+
+if importlib.util.find_spec("django_browser_reload") is not None:
+    urlpatterns.append(path("__reload__/", include("django_browser_reload.urls")))
+
+if importlib.util.find_spec("debug_toolbar") is not None:
+    urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
