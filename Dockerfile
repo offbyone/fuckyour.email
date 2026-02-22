@@ -12,7 +12,7 @@ RUN mkdir -p /code
 WORKDIR /code
 
 # Security-conscious organizations should package/review uv themselves.
-COPY --from=ghcr.io/astral-sh/uv:0.4.18 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.9.28 /uv /bin/uv
 
 COPY pyproject.toml uv.lock /code/
 RUN --mount=type=cache,target=/root/.cache <<EOT
@@ -20,7 +20,6 @@ cd /_lock
 uv sync \
     --frozen \
     --no-dev \
-    --no-sources \
     --no-install-project
 EOT
 
