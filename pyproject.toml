@@ -3,7 +3,8 @@ name = "fuckyour.email"
 version = "1.0.0"
 description = "Fuck your email, specifically"
 authors = [
-{ name = "Chris Rose", email="chris@fuckyour.email" },
+{ name = "Chris", email="chris@fuckyour.email" },
+{ name = "Also Chris", email="also.chris@fuckyour.marketing" },
 ]
 
 dependencies = [
@@ -22,12 +23,12 @@ dependencies = [
     "gunicorn>=23.0.0",
 ]
 
-requires-python = "~=3.12"
+requires-python = ">=3.14,<4.0"
 readme = "README.md"
 license = {text = "MIT"}
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest-django~=4.7.0",
     "pytest~=8.0",
     "django-stubs~=4.2.7",
